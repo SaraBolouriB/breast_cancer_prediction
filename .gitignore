@@ -1,0 +1,6 @@
+# created by virtualenv automatically
+/bin
+/lib
+/code/plots
+pyvenv.cfg
+Analysis of Wisconsin Breast Cancer original dataset using data mining and machine learning algorithms for breast cancer prediction.pdf
