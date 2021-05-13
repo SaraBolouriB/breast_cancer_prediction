@@ -10,16 +10,16 @@ def main():
     dataset_address = "../dataset/breast-cancer-wisconsin.csv"
     dataset = read_dataset(address=dataset_address)
 
-    # missing_value = dataset["Bare nuclei"].value_counts()['?']    #16
-    # rep = dataset["Bare nuclei"].replace("?", 1)
+    missing_value = dataset["Bare nuclei"].value_counts()['?']    #16
+    rep = dataset["Bare nuclei"].replace("?", 1)
 
-    # maxs = maximum(db=dataset, columns=attributes)
-    # mins = minimum(db=dataset, columns=attributes)
-    # modes = mode(db=dataset, columns=attributes)
-    # medians = median(db=dataset, columns=attributes)
-    # averages = avg(db=dataset, columns=attributes)
+    maxs = maximum(db=dataset, columns=attributes)
+    mins = minimum(db=dataset, columns=attributes)
+    modes = mode(db=dataset, columns=attributes)
+    medians = median(db=dataset, columns=attributes)
+    averages = avg(db=dataset, columns=attributes)
 
-    # bar_plot(db=dataset, column="Class")
+    bar_plot(db=dataset, column="Class")
 
 
 
