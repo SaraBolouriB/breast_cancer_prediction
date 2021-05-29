@@ -14,7 +14,7 @@ def naive_bayes(dataset):
     print(ac)
 
 def split_dataset(dataset):
-    X = dataset.iloc[:, [0, 1, 2, 3, 4, 5, 6, 7, 8]].values
+    X = dataset.iloc[:, [0:9]].values
     y = dataset.iloc[:, -1].values
     X_train, X_test, y_train, y_test = train_test_split(X, 
                                                         y, 
