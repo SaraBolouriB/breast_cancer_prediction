@@ -1,6 +1,6 @@
 from read_dataset import *
 from plot import bar_plot
-
+from naive_bayes import naive_bayes
 
 attributes = ["Clump-thickness", "Uniformity of Cell Size", "Uniformity of Cell Shape", "Marginal Adhesion",
               "Single Epithelial Cell Size", "Bare nuclei", "Bland chromatin", "Normal Nucleoli",
@@ -31,6 +31,9 @@ def main():
                      
     ### DRAW BAR PLOT FOR EACH ATTRIBUTE -------------------------------------------------------------
     bar_plot(db=dataset, column="Class")
+
+    ### NAIVE BAYES CLASSIFICATION ALGORITHM ---------------------------------------------------------
+    naive_bayes(dataset=dataset)
 
 if __name__ == "__main__":
     main()
