@@ -43,3 +43,20 @@ def kappa(labels_test, labels_pred):
 def mcc(labels_test, labels_pred):
     m = float_format % matthews_corrcoef(labels_test, labels_pred)
     return m
+
+def performance_measurement(labels_test, labels_pred, algorithm_name):
+    ac = accuracy(labels_test=labels_test, labels_pred=labels_pred)
+    kp = kappa(labels_test=labels_test, labels_pred=labels_pred)
+    ps = precision(labels_test=labels_test, labels_pred=labels_pred)
+    rc = recall(labels_test=labels_test, labels_pred=labels_pred)
+    fm = f_measure(labels_test=labels_test, labels_pred=labels_pred)
+    mc = mcc(labels_test=labels_test, labels_pred=labels_pred)
+    
+    print(algorithm_name + "-----------------------" + 
+          "\nAccuracy: " , ac,
+          "\nKappa statistics: ", kp,
+          "\nPrecision: ", ps,
+          "\nrecall: ", rc,
+          "\nF_measure: ", fm,
+          "\nMCC: ", mc,
+          "\n-----------------------------------")
