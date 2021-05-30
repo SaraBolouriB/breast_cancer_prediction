@@ -1,24 +1,32 @@
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
 from sklearn.naive_bayes import GaussianNB
-from sklearn.metrics import accuracy_score
+from data import split_dataset, transform
+from performance_metrics import accuracy, precision, recall, specificity, kappa, f_measure, mcc
+from performance_metrics import confusionMatrix
+
+
 
 def naive_bayes(dataset):
     NBClassifier = GaussianNB()
-    features_train, features_test, labels_train, labels_test = split_dataset(dataset=dataset)
+    features_train, features_test, labels_train, labels_test = split_dataset(dataset=dataset,
+                                                                             test_size=0.20)
+    
+    features_train, features_test = transform(X_train=features_train, X_test=features_test)
 
     NBClassifier.fit(features_train, labels_train)          #Training step
-    label_pred  =  NBClassifier.predict(features_test)      #Testing step
+    labels_pred  =  NBClassifier.predict(features_test)      #Testing step
 
-    ac = accuracy_score(labels_test,label_pred)
-    print(ac)
-
-def split_dataset(dataset):
-    X = dataset.iloc[:, [0:9]].values
-    y = dataset.iloc[:, -1].values
-    X_train, X_test, y_train, y_test = train_test_split(X, 
-                                                        y, 
-                                                        test_size = 0.20, 
-                                                        random_state = 0)
-
-    return X_train, X_test, y_train, y_test
+    ac = accuracy(labels_test=labels_test, labels_pred=labels_pred)
+    kp = kappa(labels_test=labels_test, labels_pred=labels_pred)
+    ps = precision(labels_test=labels_test, labels_pred=labels_pred)
+    rc = recall(labels_test=labels_test, labels_pred=labels_pred)
+    fm = f_measure(labels_test=labels_test, labels_pred=labels_pred)
+    mc = mcc(labels_test=labels_test, labels_pred=labels_pred)
+    
+    print("NAIVE BAYES -----------------------" + 
+          "\nAccuracy: " , ac,
+          "\nKappa statistics: ", kp,
+          "\nPrecision: ", ps,
+          "\nrecall: ", rc,
+          "\nF_measure: ", fm,
+          "\nMCC: ", mc,
+          "\n-----------------------------------")
