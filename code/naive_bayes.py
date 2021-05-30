@@ -1,7 +1,5 @@
 from sklearn.naive_bayes import GaussianNB
 from data import split_dataset, transform
-# from performance_metrics import accuracy, precision, recall, specificity, kappa, f_measure, mcc
-# from performance_metrics import confusionMatrix
 from performance_metrics import performance_measurement
 
 
