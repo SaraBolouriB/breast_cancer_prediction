@@ -42,12 +42,12 @@ def transform(X_train, X_test):
     X_test = sc.transform(X_test)
     return X_train, X_test
 
-def split_dataset(dataset, test_size):
+def split_dataset(dataset, test_size, random_state):
     X = dataset.iloc[:, [1, 2, 3, 4, 5, 6, 7, 8]].values
     y = dataset.iloc[:, -1].values
     X_train, X_test, y_train, y_test = train_test_split(X, 
                                                         y, 
                                                         test_size = test_size, 
-                                                        random_state = 0)
+                                                        random_state = random_state)
 
     return X_train, X_test, y_train, y_test
