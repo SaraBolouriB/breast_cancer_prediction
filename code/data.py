@@ -1,4 +1,6 @@
 import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
 
 def read_dataset(address):
     file = pd.read_csv(address)
@@ -33,3 +35,19 @@ def median(db, columns):
     for column in columns:
         medians[column] = db[column].median()
     return medians
+
+def transform(X_train, X_test):
+    sc = StandardScaler()
+    X_train = sc.fit_transform(X_train)
+    X_test = sc.transform(X_test)
+    return X_train, X_test
+
+def split_dataset(dataset, test_size):
+    X = dataset.iloc[:, [1, 2, 3, 4, 5, 6, 7, 8]].values
+    y = dataset.iloc[:, -1].values
+    X_train, X_test, y_train, y_test = train_test_split(X, 
+                                                        y, 
+                                                        test_size = test_size, 
+                                                        random_state = 0)
+
+    return X_train, X_test, y_train, y_test
