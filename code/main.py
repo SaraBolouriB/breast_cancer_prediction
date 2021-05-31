@@ -1,6 +1,9 @@
-from read_dataset import *
+from data import *
 from plot import bar_plot
 from naive_bayes import naive_bayes
+from randomForest import random_forest
+from svm import svm
+from multilayer_perceptron import mlp
 
 attributes = ["Clump-thickness", "Uniformity of Cell Size", "Uniformity of Cell Shape", "Marginal Adhesion",
               "Single Epithelial Cell Size", "Bare nuclei", "Bland chromatin", "Normal Nucleoli",
@@ -34,6 +37,15 @@ def main():
 
     ### NAIVE BAYES CLASSIFICATION ALGORITHM ---------------------------------------------------------
     naive_bayes(dataset=dataset)
+
+    ### RANDOM FOREST CLASSIFICATION ALGORITHM -------------------------------------------------------
+    random_forest(dataset=dataset)
+
+    ### SVM CLASSIFICATION ALGORITHM -----------------------------------------------------------------
+    svm(dataset=dataset)
+
+    ### MLP CLASSIFICATION ALGORITHM -----------------------------------------------------------------
+    mlp(dataset=dataset)
 
 if __name__ == "__main__":
     main()
