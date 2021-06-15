@@ -28,23 +28,26 @@ def main():
     dataset = read_dataset(address=dataset_address)
 
     ### FINDING MISSING VALUE AND REPLACE IT WITH MODE -----------------------------------------------
-    # missing_value = dataset["Bare nuclei"].value_counts()['?']    #16
-    # rep = dataset["Bare nuclei"].replace("?", 1)
+    missing_value = dataset["Bare nuclei"].value_counts()['?']    #16
+    rep = dataset["Bare nuclei"].replace("?", 1)
 
     ### CALCULATE MAX, MIN, MODE, MEDIAN, AVERAGE FOR EACH ATTRIBUTE ---------------------------------
-    # maxs = maximum(db=dataset, columns=attributes)
-    # mins = minimum(db=dataset, columns=attributes)
-    # modes = mode(db=dataset, columns=attributes)
-    # medians = median(db=dataset, columns=attributes)
-    # averages = avg(db=dataset, columns=attributes)
+    maxs = maximum(db=dataset, columns=attributes)
+    mins = minimum(db=dataset, columns=attributes)
+    modes = mode(db=dataset, columns=attributes)
+    medians = median(db=dataset, columns=attributes)
+    averages = avg(db=dataset, columns=attributes)
 
-    # for attr in attributes:
-    #     print(attr + ":\n Min:" , mins[attr] ,
-    #                  "\n Max:"  , maxs[attr] ,
-    #                  "\n Mode:" , modes[attr][0],
-    #                  "\n Median:" , medians[attr],
-    #                  "\n Average:" , averages[attr])
+    for attr in attributes:
+        print(attr + ":\n Min:" , mins[attr] ,
+                     "\n Max:"  , maxs[attr] ,
+                     "\n Mode:" , modes[attr][0],
+                     "\n Median:" , medians[attr],
+                     "\n Average:" , averages[attr])
                      
+    ### DRAW BAR PLOT FOR EACH ATTRIBUTE -------------------------------------------------------------
+    bar_plot(db=dataset, column="Class")
+
     table = {
         'Accuracy':[],
         'Kappa statistics':[],
@@ -53,9 +56,6 @@ def main():
         'F_measure':[],
         'MCC':[] 
     }
-    ### DRAW BAR PLOT FOR EACH ATTRIBUTE -------------------------------------------------------------
-    # bar_plot(db=dataset, column="Class")
-
     ### NAIVE BAYES CLASSIFICATION ALGORITHM ---------------------------------------------------------
     ac, kp, ps, rc, fm, mc = naive_bayes(dataset=dataset)
     table = add_to_dict(ac, kp, ps, rc, fm, mc, table)
@@ -77,6 +77,8 @@ def main():
     
     ### K-FOLD CROSS VALIDATE ON NAIVE BAYES ---------------------------------------------------------
     kfold_cv_table(dataset)
+
+    
 if __name__ == "__main__":
     main()
 
