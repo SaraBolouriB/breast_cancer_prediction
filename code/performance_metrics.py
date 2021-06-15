@@ -1,6 +1,7 @@
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import cohen_kappa_score, matthews_corrcoef
+import pandas as pd  
 
 float_format = '%.3f'
 
@@ -52,11 +53,17 @@ def performance_measurement(labels_test, labels_pred, algorithm_name):
     fm = f_measure(labels_test=labels_test, labels_pred=labels_pred)
     mc = mcc(labels_test=labels_test, labels_pred=labels_pred)
     
-    print(algorithm_name + "-----------------------" + 
-          "\nAccuracy: " , ac,
-          "\nKappa statistics: ", kp,
-          "\nPrecision: ", ps,
-          "\nrecall: ", rc,
-          "\nF_measure: ", fm,
-          "\nMCC: ", mc,
-          "\n-----------------------------------")
+    # print(algorithm_name + "-----------------------" + 
+    #       "\nAccuracy: " , ac,
+    #       "\nKappa statistics: ", kp,
+    #       "\nPrecision: ", ps,
+    #       "\nRecall: ", rc,
+    #       "\nF_measure: ", fm,
+    #       "\nMCC: ", mc,
+    #       "\n-----------------------------------")
+        
+    return ac, kp, ps, rc, fm, mc
+
+def perf_metr_table(table, index):
+    df = pd.DataFrame(table, index=index)  
+    print(df)

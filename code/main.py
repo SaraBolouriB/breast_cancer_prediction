@@ -4,12 +4,23 @@ from naive_bayes import naive_bayes
 from randomForest import random_forest
 from svm import svm
 from multilayer_perceptron import mlp
-from cross_validate import kfold_cv_table, cv_naive_bayes
-from sklearn.metrics import make_scorer, cohen_kappa_score, matthews_corrcoef
+from cross_validate import kfold_cv_table
+from performance_metrics import perf_metr_table
 
 attributes = ["Clump-thickness", "Uniformity of Cell Size", "Uniformity of Cell Shape", "Marginal Adhesion",
               "Single Epithelial Cell Size", "Bare nuclei", "Bland chromatin", "Normal Nucleoli",
               "Mitoses", "Class"]
+
+def add_to_dict(ac, kp, ps, rc, fm, mc, table):
+    table['Accuracy'].append(ac)
+    table['Kappa statistics'].append(kp)
+    table['Precision'].append(ps)
+    table['Recall'].append(rc)
+    table['F_measure'].append(fm)
+    table['MCC'].append(mc)
+    return table
+
+
 
 def main():
     ### READ DATABASE --------------------------------------------------------------------------------
@@ -34,28 +45,40 @@ def main():
     #                  "\n Median:" , medians[attr],
     #                  "\n Average:" , averages[attr])
                      
+    table = {
+        'Accuracy':[],
+        'Kappa statistics':[],
+        'Precision':[],
+        'Recall':[],
+        'F_measure':[],
+        'MCC':[] 
+    }
     ### DRAW BAR PLOT FOR EACH ATTRIBUTE -------------------------------------------------------------
     # bar_plot(db=dataset, column="Class")
 
     ### NAIVE BAYES CLASSIFICATION ALGORITHM ---------------------------------------------------------
-    # naive_bayes(dataset=dataset)
-
+    ac, kp, ps, rc, fm, mc = naive_bayes(dataset=dataset)
+    table = add_to_dict(ac, kp, ps, rc, fm, mc, table)
+    
     ### RANDOM FOREST CLASSIFICATION ALGORITHM -------------------------------------------------------
-    # random_forest(dataset=dataset)
-
+    ac, kp, ps, rc, fm, mc = random_forest(dataset=dataset)
+    table = add_to_dict(ac, kp, ps, rc, fm, mc, table)
+    
     ### SVM CLASSIFICATION ALGORITHM -----------------------------------------------------------------
-    # svm(dataset=dataset)
-
+    ac, kp, ps, rc, fm, mc = svm(dataset=dataset)
+    table = add_to_dict(ac, kp, ps, rc, fm, mc, table)
+    
     ### MLP CLASSIFICATION ALGORITHM -----------------------------------------------------------------
-    # mlp(dataset=dataset)
-
+    ac, kp, ps, rc, fm, mc = mlp(dataset=dataset)
+    table = add_to_dict(ac, kp, ps, rc, fm, mc, table)
+    
+    ### TABLE OF PERFORMANCE METRICS
+    perf_metr_table(table=table, index=['NAIVE BAYES','RANDOM FOREST', 'SVM', 'MLP'])
+    
     ### K-FOLD CROSS VALIDATE ON NAIVE BAYES ---------------------------------------------------------
     kfold_cv_table(dataset)
-    # print('%.3f' % cv_naive_bayes(dataset=dataset, rd=99, cv=5, scoring='precision'))
-    # maxx = []
-    # mcc = make_scorer(matthews_corrcoef)
-    # for i in range(100):
-    #     maxx.append(cv_naive_bayes(dataset=dataset, rd=i, cv=10, scoring=mcc))
-    # print(max(maxx))
 if __name__ == "__main__":
     main()
+
+
+

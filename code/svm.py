@@ -15,8 +15,9 @@ def svm(dataset):
     SVMClassifier.fit(features_train, labels_train)
     labels_pred = SVMClassifier.predict(features_test)
 
-    performance_measurement(
-        labels_test=labels_test, 
-        labels_pred=labels_pred,
-        algorithm_name="SVM"
-    )
+    ac, kp, ps, rc, fm, mc = performance_measurement(
+                                labels_test=labels_test, 
+                                labels_pred=labels_pred,
+                                algorithm_name="SVM"
+                            )
+    return ac, kp, ps, rc, fm, mc

@@ -15,8 +15,9 @@ def random_forest(dataset):
     regressor.fit(features_train, labels_train)
     labels_pred = regressor.predict(features_test)
 
-    performance_measurement(
-        labels_test=labels_test,
-        labels_pred=labels_pred,
-        algorithm_name="RANDOM FOREST"
-    )
+    ac, kp, ps, rc, fm, mc = performance_measurement(
+                                labels_test=labels_test, 
+                                labels_pred=labels_pred,
+                                algorithm_name="RANDOM FOREST"
+                            )
+    return ac, kp, ps, rc, fm, mc

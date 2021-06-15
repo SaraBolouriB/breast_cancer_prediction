@@ -11,7 +11,7 @@ def mlp(dataset):
     )
     mlpClassifier = MLPClassifier(
         hidden_layer_sizes=(100,), 
-        max_iter=400,
+        max_iter=1000,
         activation='relu', 
         solver='adam', 
         random_state=1
@@ -19,10 +19,11 @@ def mlp(dataset):
     mlpClassifier.fit(features_train, labels_train)
     labels_pred = mlpClassifier.predict(features_test)
 
-    performance_measurement(
-        labels_test=labels_test,
-        labels_pred=labels_pred,
-        algorithm_name="MLP"
-    )
+    ac, kp, ps, rc, fm, mc = performance_measurement(
+                                labels_test=labels_test, 
+                                labels_pred=labels_pred,
+                                algorithm_name="MLP"
+                            )
+    return ac, kp, ps, rc, fm, mc
 
                                                                             
