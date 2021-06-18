@@ -19,11 +19,11 @@ def mlp(dataset):
     mlpClassifier.fit(features_train, labels_train)     #Training step
     labels_pred = mlpClassifier.predict(features_test)  #Testing step
 
-    ac, kp, ps, rc, fm, mc, ra, pa = performance_measurement(
-                                        labels_test=labels_test, 
-                                        labels_pred=labels_pred,
-                                        algorithm_name="MLP"
-                                    )
-    return ac, kp, ps, rc, fm, mc, ra, pa
+    ac, kp, ps, rc, fm, mc, ra, pa, ss, sp = performance_measurement(
+                                                labels_test=labels_test, 
+                                                labels_pred=labels_pred,
+                                                algorithm_name="MLP"
+                                            )
+    return ac, kp, ps, rc, fm, mc, ra, pa, ss, sp
 
                                                                             

@@ -26,13 +26,13 @@ def specificity(labels_test, labels_pred):
     cm = confusionMatrix(labels_test=labels_test, labels_pred=labels_pred)
     TN = cm[0][0]
     FP = cm[0][1]
-    return float_format % TN / (TN+FP)
+    return float_format % (TN / (TN+FP))
 
 def sensitivity(labels_test, labels_pred):
     cm = confusionMatrix(labels_test=labels_test, labels_pred=labels_pred)
     TP = cm[1][1]
     FN = cm[1][0]
-    return float_format % TP / (TP+FN)
+    return float_format % (TP / (TP+FN))
 
 def f_measure(labels_test, labels_pred):
     fm = float_format % f1_score(labels_test, labels_pred)
@@ -63,6 +63,9 @@ def performance_measurement(labels_test, labels_pred, algorithm_name):
     mc = mcc(labels_test=labels_test, labels_pred=labels_pred)
     ra = roc_area(labels_test=labels_test, labels_pred=labels_pred)
     pa = prc_area(labels_test=labels_test, labels_pred=labels_pred)
+
+    ss = sensitivity(labels_test=labels_test, labels_pred=labels_pred)
+    sp = specificity(labels_test=labels_test, labels_pred=labels_pred)
     
     # print(algorithm_name + "-----------------------" + 
     #       "\nAccuracy: " , ac,
@@ -75,7 +78,7 @@ def performance_measurement(labels_test, labels_pred, algorithm_name):
     #       "\nPRC_area: ", pa
     #       "\n-----------------------------------")
         
-    return ac, kp, ps, rc, fm, mc, ra, pa
+    return ac, kp, ps, rc, fm, mc, ra, pa, ss, sp
 
 def perf_metr_table(table, index):
     df = pd.DataFrame(table, index=index)  
