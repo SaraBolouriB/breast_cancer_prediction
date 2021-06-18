@@ -2,6 +2,7 @@ from sklearn.naive_bayes import GaussianNB
 from data import split_dataset, transform
 from sklearn.metrics import make_scorer
 from sklearn.metrics import cohen_kappa_score, matthews_corrcoef
+from sklearn.metrics import roc_auc_score, average_precision_score
 from sklearn.model_selection import cross_val_score
 import pandas as pd  
 
@@ -29,11 +30,13 @@ def cv_naive_bayes(dataset, rd, cv, scoring):
 
 def kfold_cv_table(dataset):
     tabel = {}
-    measurments = ['accuracy', 'kappa', 'precision', 'recall', 'F-measure', 'MCC']
+    measurments = ['accuracy', 'kappa', 'precision', 'recall', 'F-measure', 'MCC', 'ROC area', 'PRC area']
     kappa = make_scorer(cohen_kappa_score)
     mcc = make_scorer(matthews_corrcoef)
-    scores = ['accuracy',kappa, 'precision', 'recall', 'f1', mcc]
-    rd = [99, 99 , 48, 99, 99, 99]
+    roc = make_scorer(roc_auc_score)
+    prc = make_scorer(average_precision_score)
+    scores = ['accuracy',kappa, 'precision', 'recall', 'f1', mcc, roc, prc]
+    rd = [99, 99 , 48, 99, 99, 99, 99, 99]
     i = 0
     for score in scores:
         name = measurments[i]

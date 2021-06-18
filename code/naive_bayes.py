@@ -14,12 +14,12 @@ def naive_bayes(dataset):
     
     features_train, features_test = transform(X_train=features_train, X_test=features_test)
 
-    NBClassifier.fit(features_train, labels_train)          #Training step
+    NBClassifier.fit(features_train, labels_train)           #Training step
     labels_pred  =  NBClassifier.predict(features_test)      #Testing step
 
-    ac, kp, ps, rc, fm, mc = performance_measurement(
-                                labels_test=labels_test, 
-                                labels_pred=labels_pred,
-                                algorithm_name="NAIVE BAYES"
-                            )
-    return ac, kp, ps, rc, fm, mc
+    ac, kp, ps, rc, fm, mc, ra, pa = performance_measurement(
+                                        labels_test=labels_test, 
+                                        labels_pred=labels_pred,
+                                        algorithm_name="NAIVE BAYES"
+                                    )
+    return ac, kp, ps, rc, fm, mc, ra, pa

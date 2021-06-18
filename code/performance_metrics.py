@@ -1,6 +1,7 @@
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import cohen_kappa_score, matthews_corrcoef
+from sklearn.metrics import roc_auc_score, average_precision_score
 import pandas as pd  
 
 float_format = '%.3f'
@@ -45,6 +46,14 @@ def mcc(labels_test, labels_pred):
     m = float_format % matthews_corrcoef(labels_test, labels_pred)
     return m
 
+def roc_area(labels_test, labels_pred):
+    ra = float_format % roc_auc_score(labels_test, labels_pred)
+    return ra
+
+def prc_area(labels_test, labels_pred):
+    pa = float_format % average_precision_score(labels_test, labels_pred)
+    return pa
+
 def performance_measurement(labels_test, labels_pred, algorithm_name):
     ac = accuracy(labels_test=labels_test, labels_pred=labels_pred)
     kp = kappa(labels_test=labels_test, labels_pred=labels_pred)
@@ -52,6 +61,8 @@ def performance_measurement(labels_test, labels_pred, algorithm_name):
     rc = recall(labels_test=labels_test, labels_pred=labels_pred)
     fm = f_measure(labels_test=labels_test, labels_pred=labels_pred)
     mc = mcc(labels_test=labels_test, labels_pred=labels_pred)
+    ra = roc_area(labels_test=labels_test, labels_pred=labels_pred)
+    pa = prc_area(labels_test=labels_test, labels_pred=labels_pred)
     
     # print(algorithm_name + "-----------------------" + 
     #       "\nAccuracy: " , ac,
@@ -60,9 +71,11 @@ def performance_measurement(labels_test, labels_pred, algorithm_name):
     #       "\nRecall: ", rc,
     #       "\nF_measure: ", fm,
     #       "\nMCC: ", mc,
+    #       "\nROC_area: ", ra,
+    #       "\nPRC_area: ", pa
     #       "\n-----------------------------------")
         
-    return ac, kp, ps, rc, fm, mc
+    return ac, kp, ps, rc, fm, mc, ra, pa
 
 def perf_metr_table(table, index):
     df = pd.DataFrame(table, index=index)  
