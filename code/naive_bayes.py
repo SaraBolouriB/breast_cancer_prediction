@@ -17,9 +17,9 @@ def naive_bayes(dataset):
     NBClassifier.fit(features_train, labels_train)           #Training step
     labels_pred  =  NBClassifier.predict(features_test)      #Testing step
 
-    ac, kp, ps, rc, fm, mc, ra, pa, ss, sp = performance_measurement(
-                                                labels_test=labels_test, 
-                                                labels_pred=labels_pred,
-                                                algorithm_name="NAIVE BAYES"
-                                            )
-    return ac, kp, ps, rc, fm, mc, ra, pa, ss, sp
+    ac, kp, ps, rc, fm, mc, ra, pa, sp = performance_measurement(
+                                            labels_test=labels_test, 
+                                            labels_pred=labels_pred,
+                                            algorithm_name="NAIVE BAYES"
+                                        )
+    return ac, kp, ps, rc, fm, mc, ra, pa, sp
