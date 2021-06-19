@@ -99,8 +99,7 @@ def main():
     table, plot_table = implementation(dataset=dataset)
 
     ### CHARTS AND TABLES ----------------------------------------------------------------------------
-
-    ## TABLE OF PERFORMANCE METRICS
+    ## TABLE OF PERFORMANCE METRICS ------------------------------------------------------------------
     perf_metr_table(table=table, index=['NAIVE BAYES','RANDOM FOREST', 'SVM', 'MLP'])
     
     ## K-FOLD CROSS VALIDATE ON NAIVE BAYES ----------------------------------------------------------
