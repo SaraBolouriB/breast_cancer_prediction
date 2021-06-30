@@ -57,17 +57,17 @@ def performance_measurement(labels_test, labels_pred, algorithm_name):
     pa = prc_area(labels_test=labels_test, labels_pred=labels_pred)
     sp = specificity(labels_test=labels_test, labels_pred=labels_pred)
 
-    print(algorithm_name + "-----------------------" + 
-          "\nAccuracy: " , ac,
-          "\nKappa statistics: ", kp,
-          "\nPrecision: ", ps,
-          "\nRecall: ", rc,
-          "\nF_measure: ", fm,
-          "\nMCC: ", mc,
-          "\nROC_area: ", ra,
-          "\nPRC_area: ", pa,
-          "\nSpecificity: ", sp,
-          "\n-----------------------------------")
+    # print(algorithm_name + "-----------------------" + 
+    #       "\nAccuracy: " , ac,
+    #       "\nKappa statistics: ", kp,
+    #       "\nPrecision: ", ps,
+    #       "\nRecall: ", rc,
+    #       "\nF_measure: ", fm,
+    #       "\nMCC: ", mc,
+    #       "\nROC_area: ", ra,
+    #       "\nPRC_area: ", pa,
+    #       "\nSpecificity: ", sp,
+    #       "\n-----------------------------------")
         
     return ac, kp, ps, rc, fm, mc, ra, pa, sp
 

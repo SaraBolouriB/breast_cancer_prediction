@@ -6,6 +6,10 @@ def read_dataset(address):
     file = pd.read_csv(address)
     return file
 
+def drop_attr(dataset, attr):
+    newD = dataset.drop(attr, axis=1)
+    return newD
+
 def avg(db, columns):
     averages = {}
     for column in columns:

@@ -4,11 +4,11 @@ from performance_metrics import performance_measurement
 
 
 
-def naive_bayes(dataset):
+def naive_bayes(dataset, test_size):
     NBClassifier = GaussianNB()
     features_train, features_test, labels_train, labels_test = split_dataset(
         dataset=dataset,
-        test_size=0.20,
+        test_size=test_size,
         random_state=51
     )
     

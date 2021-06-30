@@ -13,6 +13,7 @@ def bar_plot(db, column):
 
 def char_comparing(data, algorithm, name):
     plotdata = pd.DataFrame(data, index=algorithm)
+    plotdata= plotdata.astype(float)
     plotdata.plot(kind="bar")
     plt.title("Comparison between classifiers")
     plt.xlabel("Value")

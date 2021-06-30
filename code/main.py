@@ -12,7 +12,7 @@ attributes = ["Clump-thickness", "Uniformity of Cell Size", "Uniformity of Cell 
               "Mitoses", "Class"]
 
 def add_to_dict(*args, table):
-    if len(args) == 8:
+    if len(args) == 9:
         table['Accuracy'].append(float(args[0]))
         table['Kappa statistics'].append(float(args[1]))
         table['Precision'].append(float(args[2]))
@@ -21,6 +21,7 @@ def add_to_dict(*args, table):
         table['MCC'].append(float(args[5]))
         table['ROC'].append(float(args[6]))
         table['PRC'].append(float(args[7]))
+        table['Specificity'].append(float(args[8]))
     elif len(args) == 3:
         table['Accuracy'].append(float(args[0]))
         table['Sensitivity'].append(float(args[1]))
@@ -58,7 +59,8 @@ def implementation(dataset):
         'F_measure':[],
         'MCC':[],
         'ROC':[],
-        'PRC':[]
+        'PRC':[],
+        'Specificity':[]
     }
     plot_table = {
         'Accuracy':[],
@@ -66,26 +68,54 @@ def implementation(dataset):
         'Specificity':[]
     }
     ### NAIVE BAYES CLASSIFICATION ALGORITHM ---------------------------------------------------------
-    ac, kp, ps, rc, fm, mc, ra, pa, ps = naive_bayes(dataset=dataset)
-    table = add_to_dict(ac, kp, ps, rc, fm, mc, ra, pa, table=table)
-    plot_table = add_to_dict(ac, rc, ps, table=plot_table)
+    ac, kp, ps, rc, fm, mc, ra, pa, sp = naive_bayes(dataset=dataset, test_size=0.20)
+    table = add_to_dict(ac, kp, ps, rc, fm, mc, ra, pa, sp, table=table)
+    plot_table = add_to_dict(ac, rc, sp, table=plot_table)
 
     ### RANDOM FOREST CLASSIFICATION ALGORITHM -------------------------------------------------------
-    ac, kp, ps, rc, fm, mc, ra, pa, ps = random_forest(dataset=dataset)
-    table = add_to_dict(ac, kp, ps, rc, fm, mc, ra, pa, table=table)
-    plot_table = add_to_dict(ac, rc, ps, table=plot_table)
+    ac, kp, ps, rc, fm, mc, ra, pa, sp = random_forest(dataset=dataset)
+    table = add_to_dict(ac, kp, ps, rc, fm, mc, ra, pa, sp, table=table)
+    plot_table = add_to_dict(ac, rc, sp, table=plot_table)
 
     ### SVM CLASSIFICATION ALGORITHM -----------------------------------------------------------------
-    ac, kp, ps, rc, fm, mc, ra, pa, ps = svm(dataset=dataset)
-    table = add_to_dict(ac, kp, ps, rc, fm, mc, ra, pa, table=table)
-    plot_table = add_to_dict(ac, rc, ps, table=plot_table)
+    ac, kp, ps, rc, fm, mc, ra, pa, sp = svm(dataset=dataset)
+    table = add_to_dict(ac, kp, ps, rc, fm, mc, ra, pa, sp, table=table)
+    plot_table = add_to_dict(ac, rc, sp, table=plot_table)
 
     ### MLP CLASSIFICATION ALGORITHM -----------------------------------------------------------------
-    ac, kp, ps, rc, fm, mc, ra, pa, ps = mlp(dataset=dataset)
-    table = add_to_dict(ac, kp, ps, rc, fm, mc, ra, pa, table=table)
-    plot_table = add_to_dict(ac, rc, ps, table=plot_table)
+    ac, kp, ps, rc, fm, mc, ra, pa, sp = mlp(dataset=dataset)
+    table = add_to_dict(ac, kp, ps, rc, fm, mc, ra, pa, sp, table=table)
+    plot_table = add_to_dict(ac, rc, sp, table=plot_table)
+
+    ### J48 CLASSIFICATION ---------------------------------------------------------------------------
+    table = add_to_dict(0.928, 0.838, 0.930, 0.929, 0.929, 0.839, 0.975, 0.955, 0.924, table=table)
+    plot_table = add_to_dict(0.928, 0.929, 0.924, table=plot_table)
 
     return table, plot_table
+
+def dropping(dataset):
+    attributes.remove('Class')
+    drop_table = {
+        'Accuracy':[],
+        'Kappa statistics':[],
+        'Precision':[],
+        'Recall':[],
+        'F_measure':[],
+        'MCC':[],
+        'ROC':[],
+        'PRC':[],
+        'Specificity':[]
+    }
+    new_dataset = drop_attr(dataset=dataset, attr="Clump-thickness")
+    kfold_cv_table(new_dataset)
+    # for attr in attributes:
+    #     new_dataset = drop_attr(dataset=dataset, attr=attr)
+        # kfold_cv_table(new_dataset)
+        # ac, kp, ps, rc, fm, mc, ra, pa, sp = naive_bayes(dataset=new_dataset, test_size=0.334)
+        # drop_table = add_to_dict(ac, kp, ps, rc, fm, mc, ra, pa, sp, table=drop_table)
+        
+    # perf_metr_table(table=drop_table, index=attributes)
+    attributes.append("Class")
 
 def main():
     ### READ DATABASE --------------------------------------------------------------------------------
@@ -93,22 +123,24 @@ def main():
     dataset = read_dataset(address=dataset_address)
 
     ### PRE-PROCESSING -------------------------------------------------------------------------------
-    preprocessing(dataset=dataset)
+    # preprocessing(dataset=dataset)
     
     ### IMPLEMENTATION -------------------------------------------------------------------------------
     table, plot_table = implementation(dataset=dataset)
 
     ### CHARTS AND TABLES ----------------------------------------------------------------------------
     ## TABLE OF PERFORMANCE METRICS ------------------------------------------------------------------
-    perf_metr_table(table=table, index=['NAIVE BAYES','RANDOM FOREST', 'SVM', 'MLP'])
+    perf_metr_table(table=table, index=['NAIVE BAYES','RANDOM FOREST', 'SVM', 'MLP', 'J48'])
     
     ## K-FOLD CROSS VALIDATE ON NAIVE BAYES ----------------------------------------------------------
     kfold_table = kfold_cv_table(dataset)
-
     ## COMPARSION CHART ------------------------------------------------------------------------------
-    char_comparing(data=plot_table, algorithm=['NB','RF', 'SVM', 'MLP'], name="Comparsion 1")
+    char_comparing(data=plot_table, algorithm=['NB','RF', 'SVM', 'MLP', 'J48'], name="Comparsion 1")
     char_comparing(data=kfold_table, algorithm=['5-Fold','10-Fold', '15-Fold', '66.6 split', '85.5 split'], name="Comparsion 2")
     
+    ### DROP EACH ATTRIBUTES -------------------------------------------------------------------------
+    # dropping(dataset=dataset)
+
 if __name__ == "__main__":
     main()
 

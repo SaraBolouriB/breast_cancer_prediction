@@ -1,4 +1,5 @@
 from sklearn.naive_bayes import GaussianNB
+from naive_bayes import naive_bayes
 from data import split_dataset, transform
 from sklearn.metrics import make_scorer
 from sklearn.metrics import cohen_kappa_score, matthews_corrcoef
@@ -41,6 +42,9 @@ def kfold_cv_table(dataset):
     sp = make_scorer(recall_score, pos_label=0)
     scores = ['accuracy',kappa, 'precision', 'recall', 'f1', mcc, roc, prc, sp]
     
+    split66 = naive_bayes(dataset=dataset, test_size=0.334)
+    split85 = naive_bayes(dataset=dataset, test_size=0.145)
+
     i = 0
     for score in scores:
         name = measurments[i]
@@ -48,15 +52,13 @@ def kfold_cv_table(dataset):
         five_k = float('%.3f' % cv_naive_bayes(dataset=dataset, rd=rd[i], cv=5, scoring=score, test_size=0.2))
         ten_k = float('%.3f' % cv_naive_bayes(dataset=dataset, rd=rd[i], cv=10, scoring=score, test_size=0.2))
         fif_k = float('%.3f' % cv_naive_bayes(dataset=dataset, rd=rd[i], cv=15, scoring=score, test_size=0.2))
-        split66 = float('%.3f' % cv_naive_bayes(dataset=dataset, rd=rd[i], cv=None, scoring=score, test_size=0.334))
-        split85 = float('%.3f' % cv_naive_bayes(dataset=dataset, rd=rd[i], cv=None, scoring=score, test_size=0.145))
 
         if name == 'accuracy' or name == 'recall' or name == 'specificity':
-            table_plot = add_to_dic(five_k, ten_k, fif_k, split66, split85, name=name, dic=table_plot)
+            table_plot = add_to_dic(five_k, ten_k, fif_k, split66[i], split85[i], name=name, dic=table_plot)
         
-        table = add_to_dic(five_k, ten_k, fif_k, split66, split85, name=name, dic=table)
+        table = add_to_dic(five_k, ten_k, fif_k, split66[i], split85[i], name=name, dic=table)
         i += 1
-    
+
     df = pd.DataFrame(table, index =['5-fold', '10-fold', '15-fold', '66.6 split', '85.5 split'])  
     print(df)
 
