@@ -1,9 +1,32 @@
-from naive_bayes import naive_bayes, cv_naive_bayes
+from sklearn.naive_bayes import GaussianNB
+from naive_bayes import naive_bayes
+from data import split_dataset, transform
 from sklearn.metrics import make_scorer
 from sklearn.metrics import cohen_kappa_score, matthews_corrcoef
 from sklearn.metrics import roc_auc_score, average_precision_score, recall_score
+from sklearn.model_selection import cross_val_score
 import pandas as pd  
 
+
+def cv_naive_bayes(dataset, rd, cv, scoring, test_size):
+    NBClassifier = GaussianNB()
+    features_train, features_test, labels_train, labels_test = split_dataset(
+        dataset=dataset,
+        test_size=test_size,
+        random_state=rd
+    )
+    
+    features_train, features_test = transform(X_train=features_train, X_test=features_test)
+
+    cv_results = cross_val_score(
+        NBClassifier, 
+        features_train, 
+        labels_train,
+        cv = cv,
+        scoring = scoring
+    )
+                                 
+    return cv_results.mean()
 
 def kfold_cv_NB(dataset):
     table = {}

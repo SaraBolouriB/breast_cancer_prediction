@@ -37,7 +37,7 @@ def cv_mlp(dataset):
     features_train, features_test, labels_train, labels_test = split_dataset(
         dataset=dataset, 
         test_size=0.20,
-        random_state=99
+        random_state=0
     )
     result = performance_measurement_cv(algorithm=mlpClassifier, features_train=features_train, labels_train=labels_train)
                                  
