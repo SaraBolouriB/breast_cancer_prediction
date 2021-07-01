@@ -1,6 +1,6 @@
 from data import transform, split_dataset
 from sklearn.neural_network import MLPClassifier
-from performance_metrics import performance_measurement, cross_fold
+from performance_metrics import performance_measurement, performance_measurement_cv
 
 def mlp(dataset):
     mlpClassifier = MLPClassifier(
@@ -39,6 +39,6 @@ def cv_mlp(dataset):
         test_size=0.20,
         random_state=99
     )
-    result = cross_fold(algorithm=mlpClassifier, features_train=features_train, labels_train=labels_train)
+    result = performance_measurement_cv(algorithm=mlpClassifier, features_train=features_train, labels_train=labels_train)
                                  
     return result                                                      

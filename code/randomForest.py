@@ -1,6 +1,6 @@
 from data import transform, split_dataset
 from sklearn.ensemble import RandomForestClassifier
-from performance_metrics import performance_measurement, cross_fold
+from performance_metrics import performance_measurement, performance_measurement_cv
 
 def random_forest(dataset):
     regressor = RandomForestClassifier(n_estimators=100)
@@ -32,6 +32,6 @@ def cv_random_forest(dataset):
 
     features_train, features_test = transform(X_train=features_train, X_test=features_test)
 
-    result = cross_fold(algorithm=regressor, features_train=features_train, labels_train=labels_train)
+    result = performance_measurement_cv(algorithm=regressor, features_train=features_train, labels_train=labels_train)
                                  
     return result

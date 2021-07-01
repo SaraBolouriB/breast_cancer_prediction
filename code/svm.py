@@ -1,6 +1,6 @@
 from sklearn.svm import SVC
 from data import split_dataset, transform
-from performance_metrics import performance_measurement, cross_fold
+from performance_metrics import performance_measurement, performance_measurement_cv
 
 
 def svm(dataset):
@@ -34,6 +34,6 @@ def cv_svm(dataset):
 
     features_train, features_test = transform(X_train=features_train, X_test=features_test)
 
-    result = cross_fold(algorithm=SVMClassifier, features_train=features_train, labels_train=labels_train)
+    result = performance_measurement_cv(algorithm=SVMClassifier, features_train=features_train, labels_train=labels_train)
                                  
     return result

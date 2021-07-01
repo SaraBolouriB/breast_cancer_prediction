@@ -3,6 +3,8 @@ from sklearn.metrics import confusion_matrix
 from sklearn.metrics import cohen_kappa_score, matthews_corrcoef
 from sklearn.metrics import roc_auc_score, average_precision_score
 import pandas as pd  
+from sklearn.metrics import make_scorer
+from sklearn.model_selection import cross_val_score
 
 float_format = '%.3f'
 
@@ -15,6 +17,7 @@ def precision(labels_test, labels_pred):
     return pc
 
 def recall(labels_test, labels_pred):
+    # Sencitivity and Recall
     rc = float_format % recall_score(labels_test, labels_pred)
     return rc
 
@@ -70,6 +73,26 @@ def performance_measurement(labels_test, labels_pred, algorithm_name):
     #       "\n-----------------------------------")
         
     return ac, kp, ps, rc, fm, mc, ra, pa, sp
+
+def performance_measurement_cv(algorithm, features_train, labels_train):
+    result = []
+    kappa = make_scorer(cohen_kappa_score)
+    mcc = make_scorer(matthews_corrcoef)
+    roc = make_scorer(roc_auc_score)
+    prc = make_scorer(average_precision_score)
+    sp = make_scorer(recall_score, pos_label=0)
+    scores = ['accuracy',kappa, 'precision', 'recall', 'f1', mcc, roc, prc, sp]
+
+    for score in scores:
+        result.append(float(float_format % cross_val_score(
+                algorithm, 
+                features_train, 
+                labels_train,
+                cv = 10,
+                scoring = score
+            ).mean())
+        )
+    return result
 
 def perf_metr_table(table, index):
     df = pd.DataFrame(table, index=index)  

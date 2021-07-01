@@ -1,7 +1,6 @@
 from sklearn.naive_bayes import GaussianNB
 from data import split_dataset, transform
-from performance_metrics import performance_measurement, cross_fold
-from sklearn.model_selection import cross_val_score
+from performance_metrics import performance_measurement, performance_measurement_cv
 
 def naive_bayes(dataset, test_size):
     NBClassifier = GaussianNB()
