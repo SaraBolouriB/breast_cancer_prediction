@@ -1,15 +1,14 @@
 from sklearn.naive_bayes import GaussianNB
 from data import split_dataset, transform
-from performance_metrics import performance_measurement
-
-
+from performance_metrics import performance_measurement, cross_fold
+from sklearn.model_selection import cross_val_score
 
 def naive_bayes(dataset, test_size):
     NBClassifier = GaussianNB()
     features_train, features_test, labels_train, labels_test = split_dataset(
         dataset=dataset,
         test_size=test_size,
-        random_state=51
+        random_state=99
     )
     
     features_train, features_test = transform(X_train=features_train, X_test=features_test)
@@ -23,3 +22,17 @@ def naive_bayes(dataset, test_size):
                                             algorithm_name="NAIVE BAYES"
                                         )
     return ac, kp, ps, rc, fm, mc, ra, pa, sp
+
+def cv_naive_bayes(dataset):
+    NBClassifier = GaussianNB()
+    features_train, features_test, labels_train, labels_test = split_dataset(
+        dataset=dataset,
+        test_size=0.20,
+        random_state=99
+    )
+    
+    features_train, features_test = transform(X_train=features_train, X_test=features_test)
+
+    result = cross_fold(algorithm=NBClassifier, features_train=features_train, labels_train=labels_train)
+                                 
+    return result
