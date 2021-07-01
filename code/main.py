@@ -38,8 +38,8 @@ def implementation(dataset):
     result["Naive Bayes"] = cv_naive_bayes(dataset=dataset)
     result["SVM"] = cv_svm(dataset=dataset)
     result["Random Forest"] = cv_random_forest(dataset=dataset)
-    # result["MLP"] = cv_mlp(dataset=dataset)
-    result["MLP"] = [0.964, 0.921, 0.961, 0.939, 0.949, 0.923, 0.959, 0.923, 0.978]
+    result["MLP"] = cv_mlp(dataset=dataset)
+    # result["MLP"] = [0.964, 0.921, 0.961, 0.939, 0.949, 0.923, 0.959, 0.923, 0.978]
     result["J48"] = [0.928, 0.838, 0.930, 0.929, 0.929, 0.839, 0.975, 0.955, 0.924]
 
     return result
