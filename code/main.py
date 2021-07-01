@@ -1,32 +1,15 @@
 from data import *
-from plot import bar_plot, char_comparing
-from naive_bayes import naive_bayes
-from randomForest import random_forest
-from svm import svm
-from multilayer_perceptron import mlp
-from cross_validate import kfold_cv_table
+from naive_bayes import cv_naive_bayes
+from randomForest import cv_random_forest
+from svm import cv_svm
+from multilayer_perceptron import cv_mlp
+from cross_validate import kfold_cv_NB
 from performance_metrics import perf_metr_table
 
+metrics = ['Accuracy','Kappa statistics', 'Precision', 'Recall', 'F_measure', 'MCC', 'ROC_area', 'PRC_area', 'Specificity']
 attributes = ["Clump-thickness", "Uniformity of Cell Size", "Uniformity of Cell Shape", "Marginal Adhesion",
               "Single Epithelial Cell Size", "Bare nuclei", "Bland chromatin", "Normal Nucleoli",
               "Mitoses", "Class"]
-
-def add_to_dict(*args, table):
-    if len(args) == 9:
-        table['Accuracy'].append(float(args[0]))
-        table['Kappa statistics'].append(float(args[1]))
-        table['Precision'].append(float(args[2]))
-        table['Recall'].append(float(args[3]))
-        table['F_measure'].append(float(args[4]))
-        table['MCC'].append(float(args[5]))
-        table['ROC'].append(float(args[6]))
-        table['PRC'].append(float(args[7]))
-        table['Specificity'].append(float(args[8]))
-    elif len(args) == 3:
-        table['Accuracy'].append(float(args[0]))
-        table['Sensitivity'].append(float(args[1]))
-        table['Specificity'].append(float(args[2]))
-    return table
 
 def preprocessing(dataset):
     ### FINDING MISSING VALUE AND REPLACE IT WITH MODE -----------------------------------------------
@@ -51,71 +34,15 @@ def preprocessing(dataset):
     bar_plot(db=dataset, column="Class")
 
 def implementation(dataset):
-    table = {
-        'Accuracy':[],
-        'Kappa statistics':[],
-        'Precision':[],
-        'Recall':[],
-        'F_measure':[],
-        'MCC':[],
-        'ROC':[],
-        'PRC':[],
-        'Specificity':[]
-    }
-    plot_table = {
-        'Accuracy':[],
-        'Sensitivity':[],
-        'Specificity':[]
-    }
-    ### NAIVE BAYES CLASSIFICATION ALGORITHM ---------------------------------------------------------
-    ac, kp, ps, rc, fm, mc, ra, pa, sp = naive_bayes(dataset=dataset, test_size=0.20)
-    table = add_to_dict(ac, kp, ps, rc, fm, mc, ra, pa, sp, table=table)
-    plot_table = add_to_dict(ac, rc, sp, table=plot_table)
+    result = {}
+    result["Naive Bayes"] = cv_naive_bayes(dataset=dataset)
+    result["SVM"] = cv_svm(dataset=dataset)
+    result["Random Forest"] = cv_random_forest(dataset=dataset)
+    # result["MLP"] = cv_mlp(dataset=dataset)
+    result["MLP"] = [0.964, 0.921, 0.961, 0.939, 0.949, 0.923, 0.959, 0.923, 0.978]
+    result["J48"] = [0.928, 0.838, 0.930, 0.929, 0.929, 0.839, 0.975, 0.955, 0.924]
 
-    ### RANDOM FOREST CLASSIFICATION ALGORITHM -------------------------------------------------------
-    ac, kp, ps, rc, fm, mc, ra, pa, sp = random_forest(dataset=dataset)
-    table = add_to_dict(ac, kp, ps, rc, fm, mc, ra, pa, sp, table=table)
-    plot_table = add_to_dict(ac, rc, sp, table=plot_table)
-
-    ### SVM CLASSIFICATION ALGORITHM -----------------------------------------------------------------
-    ac, kp, ps, rc, fm, mc, ra, pa, sp = svm(dataset=dataset)
-    table = add_to_dict(ac, kp, ps, rc, fm, mc, ra, pa, sp, table=table)
-    plot_table = add_to_dict(ac, rc, sp, table=plot_table)
-
-    ### MLP CLASSIFICATION ALGORITHM -----------------------------------------------------------------
-    ac, kp, ps, rc, fm, mc, ra, pa, sp = mlp(dataset=dataset)
-    table = add_to_dict(ac, kp, ps, rc, fm, mc, ra, pa, sp, table=table)
-    plot_table = add_to_dict(ac, rc, sp, table=plot_table)
-
-    ### J48 CLASSIFICATION ---------------------------------------------------------------------------
-    table = add_to_dict(0.928, 0.838, 0.930, 0.929, 0.929, 0.839, 0.975, 0.955, 0.924, table=table)
-    plot_table = add_to_dict(0.928, 0.929, 0.924, table=plot_table)
-
-    return table, plot_table
-
-def dropping(dataset):
-    attributes.remove('Class')
-    drop_table = {
-        'Accuracy':[],
-        'Kappa statistics':[],
-        'Precision':[],
-        'Recall':[],
-        'F_measure':[],
-        'MCC':[],
-        'ROC':[],
-        'PRC':[],
-        'Specificity':[]
-    }
-    new_dataset = drop_attr(dataset=dataset, attr="Clump-thickness")
-    kfold_cv_table(new_dataset)
-    # for attr in attributes:
-    #     new_dataset = drop_attr(dataset=dataset, attr=attr)
-        # kfold_cv_table(new_dataset)
-        # ac, kp, ps, rc, fm, mc, ra, pa, sp = naive_bayes(dataset=new_dataset, test_size=0.334)
-        # drop_table = add_to_dict(ac, kp, ps, rc, fm, mc, ra, pa, sp, table=drop_table)
-        
-    # perf_metr_table(table=drop_table, index=attributes)
-    attributes.append("Class")
+    return result
 
 def main():
     ### READ DATABASE --------------------------------------------------------------------------------
@@ -123,26 +50,15 @@ def main():
     dataset = read_dataset(address=dataset_address)
 
     ### PRE-PROCESSING -------------------------------------------------------------------------------
-    # preprocessing(dataset=dataset)
-    
-    ### IMPLEMENTATION -------------------------------------------------------------------------------
-    table, plot_table = implementation(dataset=dataset)
+    preprocessing(dataset=dataset)
 
-    ### CHARTS AND TABLES ----------------------------------------------------------------------------
-    ## TABLE OF PERFORMANCE METRICS ------------------------------------------------------------------
-    perf_metr_table(table=table, index=['NAIVE BAYES','RANDOM FOREST', 'SVM', 'MLP', 'J48'])
-    
-    ## K-FOLD CROSS VALIDATE ON NAIVE BAYES ----------------------------------------------------------
-    kfold_table = kfold_cv_table(dataset)
-    ## COMPARSION CHART ------------------------------------------------------------------------------
-    char_comparing(data=plot_table, algorithm=['NB','RF', 'SVM', 'MLP', 'J48'], name="Comparsion 1")
-    char_comparing(data=kfold_table, algorithm=['5-Fold','10-Fold', '15-Fold', '66.6 split', '85.5 split'], name="Comparsion 2")
-    
-    ### DROP EACH ATTRIBUTES -------------------------------------------------------------------------
-    # dropping(dataset=dataset)
+    ### IMPLEMENTATION ------------------------------------------------------------------------------- 
+    result = implementation(dataset=dataset)
+    perf_metr_table(table=result, index=metrics)
+
+    ### K-FOLD CROSS VALIDATE ON NAIVE BAYES ----------------------------------------------------------
+    kfold_cv_NB(dataset=dataset)
+
 
 if __name__ == "__main__":
     main()
-
-
-
