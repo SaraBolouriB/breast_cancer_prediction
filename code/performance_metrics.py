@@ -94,6 +94,13 @@ def performance_measurement_cv(algorithm, features_train, labels_train):
         )
     return result
 
-def perf_metr_table(table, index):
-    df = pd.DataFrame(table, index=index)  
+def perf_metr_table(table, index, type):
+    if type == 1:
+        df = pd.DataFrame(table, index=index)  
+    elif type == 2:
+        df = pd.DataFrame.from_dict(
+            table,
+            orient='index',
+            columns=index
+        )
     print(df)

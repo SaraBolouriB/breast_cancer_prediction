@@ -44,6 +44,18 @@ def implementation(dataset):
 
     return result
 
+def dropping(dataset):
+    attributes.remove('Class')
+    drop_table = {}
+
+    for attr in attributes:
+        new_dataset = drop_attr(dataset=dataset, attr=attr)
+        result = cv_naive_bayes(dataset=new_dataset)
+        drop_table[attr] = result
+        
+    perf_metr_table(table=drop_table, index=metrics, type=2)
+    attributes.append("Class")
+
 def main():
     ### READ DATABASE --------------------------------------------------------------------------------
     dataset_address = "../dataset/breast-cancer-wisconsin.csv"
@@ -54,11 +66,13 @@ def main():
 
     ### IMPLEMENTATION ------------------------------------------------------------------------------- 
     result = implementation(dataset=dataset)
-    perf_metr_table(table=result, index=metrics)
+    perf_metr_table(table=result, index=metrics, type=1)
 
     ### K-FOLD CROSS VALIDATE ON NAIVE BAYES ----------------------------------------------------------
     kfold_cv_NB(dataset=dataset)
 
+    ### DROP EACH ATTRIBIUTESS ------------------------------------------------------------------------
+    dropping(dataset=dataset)
 
 if __name__ == "__main__":
     main()
