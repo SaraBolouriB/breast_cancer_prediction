@@ -7,7 +7,7 @@ Breast cancer has become a concerning issue in recent years. In many cases, sepa
 ## Result
 ### Study of the algorithm's performance
 <p align="justify">
-I firstly domenstrate the obtained result of proposed classifier methods with different parameters. In this section, 10-fold cross validation is used. By checking all parameters to find the better-performing algorithms, it came to the point that Naive Bayes gives the best result among other algorithms. 
+I first demonstrated the obtained result of proposed classifier methods with different parameters. In this section, 10-fold cross validation is used. By checking all parameters to find the better-performing algorithms, it came to the point that Naive Bayes gives the best result among other algorithms. 
 </p>
 <div align="center">
 
@@ -24,7 +24,7 @@ I firstly domenstrate the obtained result of proposed classifier methods with di
 
 ### Performance improvement study based on the dataset analyzing and modifying
 <p align="justify">
-As Naïve Bayes classifier worked best among our proposed classifiers, I tried to optimize the result further. I tried to find the effectiveness of each feature and their effects on the performance. After removing the feature that has less impact on the dataset and negative effects on accuracy, I get better accuracy with a better result, shown below.
+As the Naïve Bayes classifier worked best among our proposed classifiers, I tried to optimize the result further. I tried to find the effectiveness of each feature and their effects on the performance. After removing the feature that has less impact on the dataset and negative effects on accuracy, I get better accuracy with a better result, shown below.
 <p/>
 <div align="center">
   
@@ -44,3 +44,21 @@ To run the script and see the result, follow the below steps:
 1. pip install -r requirments.txt
 2. cd ./code
 3. python main.py
+
+## How code works
+The main method of the program has been shown in the image below. The code will be explained in the following:
+<div align="center">
+  
+![image](https://github.com/SaraBolouriB/breast_cancer_prediction/assets/45979215/fc5657a9-9e2c-4106-b063-b76ee10950db)
+</div>
+
+<p align="justify">
+
+1. First, the data is read after loading the database.
+2. Second, the preprocessing gets started. for preprocessing, the following steps have been done:
+   - Finding the missing values, which have been set as '?', and replacing them with the digit "1".
+   - Calculating the maximum, minimum, mode, median, and average for each attribute in the database.
+4. Third, all mentioned classification algorithms have been implemented on the preprocessed database. In this step, all the performance metrics are calculated for each classification algorithm.
+5. Fourth, for the best performance result, Naive Bayes, the k-fold validation has been done.
+6. Finally, to improve the result, each attribute in the database is dropped, and then calculate the performance again to find out which attribute has the most negative effect on the accuracy.
+</p>
